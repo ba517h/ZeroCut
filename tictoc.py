@@ -12,11 +12,12 @@ Active_Matrix = [[True for x in range(3)] for y in range(3)]
 IMAGES = {}
 player = True
 
+#Function to convert pixel coordinates into game coordinates -- matrix indices
 def get_index(value):
-    '''Return index [][][][] for the corresponding mouse click'''
+    ''''''
 
+#Function to check whether the given matrix is clickable
 def is_active(value):
-    '''returns if the current matrix is clickable'''
     return Active_Matrix[value[0]][value[1]]
 
 

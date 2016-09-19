@@ -9,19 +9,19 @@ Game_Matrix = [[None for x in range(9)] for y in range(9)]
 Posession_MatrixO = [None for x in range(3) for y in range (3)]
 Posession_MatrixX = [None for x in range(3) for y in range (3)]
 Active_Matrix = [[True for x in range(3)] for y in range(3)]
-
 IMAGES = {}
+player = True
 
 def get_index(value):
-    '''Return index [][] for the corresponding mouse click'''
+    '''Return index [][][][] for the corresponding mouse click'''
 
 def is_active(value):
     '''returns if the current matrix is clickable'''
     return Active_Matrix[value[0]][value[1]]
 
+
 def playgame():
-    '''Test'''
-    print 'inside play'
+    #game loop
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -32,11 +32,14 @@ def playgame():
             if event.type == MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
                 index = get_index(pos)
-                if is_active(index) == False:
+                if is_active(index) == False or Game_Matrix[index[0]*3+index[2]][index[1]*3+index[3]] is not None:
                     '''make sound that this click is not possible'''
                 else :
                     '''valid movement'''
-
+                    Game_Matrix[index[0] * 3 + index[2]][index[1] * 3 + index[3]] = player
+                    if check()
+                    #do all operations and change player
+                    player = not player
 
 
 

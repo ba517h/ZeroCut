@@ -14,15 +14,127 @@ player = True
 
 #Function to convert pixel coordinates into game coordinates -- matrix indices
 def get_index(value):
-    '''returns None if not a valid play area'''
+    index = [0,0,0,0]
+    #row conversion
+    if 0<=value[0]<=163:
+        index[0] = 0
+        if 0<=value[0]<=51:
+            index[2] = 0
+        elif 56<=value[0]<=107:
+            index[2] = 1
+        elif 112<=value[0]<=163:
+            index[2] = 2
+        else:
+            return None
+    elif 174<=value[0]<=337:
+        index[0] = 1
+        if 174<=value[0]<=225:
+            index[2] = 0
+        elif 230<=value[0]<=281:
+            index[2] = 1
+        elif 286<=value[0]<=337:
+            index[2] = 2
+        else:
+            return None
+    elif 348<=value[0]<=511:
+        index[0] = 2
+        if 348<=value[0]<=399:
+            index[2] = 0
+        elif 404<=value[0]<=455:
+            index[2] = 0
+        elif 460<=value[0]<=511:
+            index[2] = 0
+        else:
+            return None
+    else:
+        return None
+
+    #column conversion
+    if 0<=value[1]<=163:
+        index[1] = 0
+        if 0 <= value[1] <= 51:
+            index[3] = 0
+        elif 56 <= value[1] <= 107:
+            index[3] = 1
+        elif 112 <= value[1] <= 163:
+            index[3] = 2
+        else:
+            return None
+    elif 174 <= value[1] <= 337:
+        index[1] = 1
+        if 174 <= value[1] <= 225:
+            index[3] = 0
+        elif 230 <= value[1] <= 281:
+            index[3] = 1
+        elif 286 <= value[1] <= 337:
+            index[3] = 2
+        else:
+            return None
+    elif 348 <= value[1] <= 511:
+        index[1] = 2
+        if 348 <= value[1] <= 399:
+            index[3] = 0
+        elif 404 <= value[1] <= 455:
+            index[3] = 0
+        elif 460 <= value[1] <= 511:
+            index[3] = 0
+        else:
+            return None
+    else:
+        return None
 
 #Function to check whether the given matrix is clickable
 def is_active(value):
-    return Active_Matrix[value[0]][value[1]]
+    index = get_index(value)
+    if index is None:
+        return False
+    if (Active_Matrix[index[0]][index[1]] == False):
+        return False
+    if (164<=value[0]<=173) or (338<=value[0]<=347) or (52<=value[0]<=55) or (108<=value[0]<=111) or (226<=value[0]<=229) or (282<=value[0]<=285) or (400<=value[0]<=403) or (456<=value[0]<=459):
+        return False
+    if (164<=value[1]<=173) or (338<=value[1]<=347) or (52<=value[1]<=55) or (108<=value[1]<=111) or (226<=value[1]<=229) or (282<=value[1]<=285) or (400<=value[1]<=403) or (456<=value[1]<=459):
+        return False
+    return True
 
 #Function to check whether a 3x3 matrix has got 3 in a row
 def check(matrix):
-    '''Return {'O': ,'X': }'''
+    ret = {'O':False,'X':False}
+    i=j=f1=f2=0
+    for i in range(3):
+        if matrix[i][j] == matrix[i][j+1] == matrix[i][j+2]:
+            if matrix[i][j] == False:
+                f1 = 1
+            else:
+                f2 = 1
+        break
+
+    for j in range(3):
+        if matrix[i][j] == matrix[i+1][j] == matrix[i+2][j]:
+            if matrix[i][j] is False:
+                f1 = 1
+            else:
+                f2 = 1
+        break
+
+    if matrix[i][j] == matrix[i+1][j+1] == matrix[i+2][j+2]:
+        if matrix[i][j] is False:
+            f1 = 1
+        else:
+            f2 = 1
+
+    j=2
+    if matrix[i][j] == matrix[i+1][j-1] == matrix[i+2][j-2]:
+        if matrix[i][j] is False:
+            f1 = 1
+        else:
+            f2 = 1
+
+    if f1 == 1:
+        ret['O']=True
+    if f2 == 1:
+        ret['X']=True
+    return ret
+
 
 #Function to display the winning
 def won(player):
@@ -53,9 +165,7 @@ def playgame():
             if event.type == MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
                 index = get_index(pos)
-                if index is None:
-                    continue
-                if is_active(index) == False or (is_active(index) == True and Game_Matrix[index[0]*3+index[2]][index[1]*3+index[3]] is not None):  #correction required. problem in logic
+                if is_active(pos) == False or (is_active(pos) == True and Game_Matrix[index[0]*3+index[2]][index[1]*3+index[3]] is not None):
                     '''make sound that this click is not possible'''
                 else :
                     '''valid movement'''

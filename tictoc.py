@@ -14,7 +14,7 @@ player = True
 
 #Function to convert pixel coordinates into game coordinates -- matrix indices
 def get_index(value):
-    ''''''
+    '''returns None if not a valid play area'''
 
 #Function to check whether the given matrix is clickable
 def is_active(value):
@@ -40,6 +40,8 @@ def won(player):
             return
 
 def playgame():
+    global Active_Matrix
+
     #game loop
     while True:
         for event in pygame.event.get():
@@ -51,12 +53,16 @@ def playgame():
             if event.type == MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
                 index = get_index(pos)
-                if is_active(index) == False or Game_Matrix[index[0]*3+index[2]][index[1]*3+index[3]] is not None:
+                if index is None:
+                    continue
+                if is_active(index) == False or (is_active(index) == True and Game_Matrix[index[0]*3+index[2]][index[1]*3+index[3]] is not None):  #correction required. problem in logic
                     '''make sound that this click is not possible'''
                 else :
                     '''valid movement'''
                     Game_Matrix[index[0] * 3 + index[2]][index[1] * 3 + index[3]] = player
                     status = check([row[index[0]*3:index[0]*3+3] for row in Game_Matrix[index[1]*3:index[1]*3+1]]) #'O','X'
+                    Active_Matrix = [[False for x in range(3)] for y in range(3)]
+                    Active_Matrix[index[0]][index[1]] = True
                     if status['O'] == True and player == False:
                         Posession_MatrixO[index[0]][index[1]] = True
                         win_status = check(Posession_MatrixO)
@@ -86,8 +92,8 @@ def main():
     pygame.display.set_caption('Tic Toc')
 
     IMAGES['background'] = pygame.image.load('assets/images/bg.png').convert()
-    IMAGES['X'] = pygame.image.load('assets/images/x.png').convert()
-    IMAGES['O'] = pygame.image.load('assets/images/o.png').convert()
+    #IMAGES['X'] = pygame.image.load('assets/images/x.png').convert()
+    #IMAGES['O'] = pygame.image.load('assets/images/o.png').convert()
 
     #Overall game loop
     while True:

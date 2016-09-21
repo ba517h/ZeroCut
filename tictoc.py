@@ -168,7 +168,7 @@ def playgame():
                 if is_active(pos) == False or (is_active(pos) == True and Game_Matrix[index[0]*3+index[2]][index[1]*3+index[3]] is not None):
                     '''make sound that this click is not possible'''
                 else :
-                    '''valid movement'''
+                    #valid movement
                     Game_Matrix[index[0] * 3 + index[2]][index[1] * 3 + index[3]] = player
                     status = check([row[index[0]*3:index[0]*3+3] for row in Game_Matrix[index[1]*3:index[1]*3+1]]) #'O','X'
                     Active_Matrix = [[False for x in range(3)] for y in range(3)]
@@ -202,6 +202,10 @@ def main():
     pygame.display.set_caption('Tic Toc')
 
     IMAGES['background'] = pygame.image.load('assets/images/bg.png').convert()
+    IMAGES['thick'] = pygame.image.load('assets/images/vara1.png').convert()
+    IMAGES['thin'] = pygame.image.load('assets/images/vara2.png').convert()
+    IMAGES['O'] = pygame.image.load('assets/images/O.png').convert()
+    IMAGES['X'] = pygame.image.load('assets/images/X.png').convert()
     #IMAGES['X'] = pygame.image.load('assets/images/x.png').convert()
     #IMAGES['O'] = pygame.image.load('assets/images/o.png').convert()
 
@@ -218,6 +222,8 @@ def main():
                     playgame()
 
         SCREEN.blit(IMAGES['background'], (0, 0))
+        SCREEN.blit(IMAGES['thick'],(0,164))
+        SCREEN.blit(IMAGES['thick'],(0,338))
         pygame.display.update()
 
 if __name__ == '__main__':

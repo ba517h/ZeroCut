@@ -102,6 +102,7 @@ def is_active(value):
 #Function to check whether a 3x3 matrix has got 3 in a row
 def check(matrix):
     ret = {'O':False,'X':False}
+    print matrix
     i=j=f1=f2=0
     for i in range(3):
         if matrix[i][j] == matrix[i][j+1] == matrix[i][j+2]:
@@ -110,7 +111,7 @@ def check(matrix):
             else:
                 f2 = 1
         break
-
+    i=0
     for j in range(3):
         if matrix[i][j] == matrix[i+1][j] == matrix[i+2][j]:
             if matrix[i][j] is False:
@@ -159,7 +160,6 @@ def won(player):
 def playgame():
     global Active_Matrix
     global player
-    coord = [None,None]
     #game loop
     while True:
         for event in pygame.event.get():
@@ -198,6 +198,7 @@ def playgame():
                     player = not player
         #drawing the screen
         SCREEN.blit(IMAGES['gamebg'],(0,0))
+        coord = [None, None]
         for i in range(9):
            for j in range(9):
                 if Game_Matrix[i][j] is not None:
@@ -238,10 +239,10 @@ def playgame():
                         coord[1]=404
                     else:
                         coord[1]=460
-                if Game_Matrix[i][j] == True:
-                    SCREEN.blit(IMAGES('X'),(coord[0],coord[1]))
-                else:
-                    SCREEN.blit(IMAGES('O'), (coord[0], coord[1]))
+                    if Game_Matrix[i][j] == True:
+                        SCREEN.blit(IMAGES['X'],(coord[0],coord[1]))
+                    else:
+                        SCREEN.blit(IMAGES['O'], (coord[0], coord[1]))
                     
 
         #setting the shadow for inactive matrices

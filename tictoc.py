@@ -101,6 +101,7 @@ def is_active(value):
 
 #Function to check whether a 3x3 matrix has got 3 in a row
 def check(matrix):
+    print matrix
     ret = {'O':False,'X':False}
     i=j=f1=f2=0
     for i in range(3):
@@ -109,7 +110,7 @@ def check(matrix):
                 f1 = 1
             elif matrix[i][j] is True:
                 f2 = 1
-        break
+            #break
     i=0
     for j in range(3):
         if matrix[i][j] == matrix[i+1][j] == matrix[i+2][j]:
@@ -117,7 +118,7 @@ def check(matrix):
                 f1 = 1
             elif matrix[i][j] is True:
                 f2 = 1
-        break
+            #break
     j=0
     if matrix[i][j] == matrix[i+1][j+1] == matrix[i+2][j+2]:
         if matrix[i][j] is False:
@@ -177,28 +178,33 @@ def playgame():
                     #valid movement
                     index = index1
                     Game_Matrix[index[0] * 3 + index[2]][index[1] * 3 + index[3]] = player
-                    status = check([row[index[0]*3:index[0]*3+3] for row in Game_Matrix[index[1]*3:index[1]*3+3]]) #'O','X'
+                    print 'check 1'
+                    print 'index'
+                    print index
+                    status = check([row[index[1]*3:index[1]*3+3] for row in Game_Matrix[index[0]*3:index[0]*3+3]]) #'O','X'
                     print status
                     Active_Matrix = [[False for x in range(3)] for y in range(3)]
                     Active_Matrix[index[2]][index[3]] = True
                     if status['O'] == True and player == False:
                         print 'in O'
-                        print Posession_MatrixO
-                        print Posession_MatrixX
                         Posession_MatrixO[index[0]][index[1]] = True
+                        print Posession_MatrixO
+                        print 'check 2'
                         win_status = check(Posession_MatrixO)
-                        if win_status['X'] == True:
+                        if win_status['X'] == True:    #win_status['X'] is used since both posession matrices use true to represent possesed ...
+                            print 'Ojayichu'
                             won(False)
                             return
                         player = not player
                         continue
                     if status['X'] == True and player == True:
                         print 'in X'
-                        print Posession_MatrixO
-                        print Posession_MatrixX
                         Posession_MatrixX[index[0]][index[1]] = True
+                        print Posession_MatrixX
+                        print 'check 2'
                         win_status = check(Posession_MatrixX)
                         if win_status['X'] == True:
+                            print 'Xjayichu'
                             won(True)
                             return
                         player = not player

@@ -155,7 +155,12 @@ def won(player):
         if event.type == KEYDOWN or event.type == MOUSEBUTTONUP:
             return
 
-
+'''def check_full(matrix):
+    for i in range(3):
+        for j in range(3):
+            if matrix[i][j] is None:
+                return False
+    return True'''
 
 def playgame():
     global Active_Matrix
@@ -185,6 +190,9 @@ def playgame():
                     print status
                     Active_Matrix = [[False for x in range(3)] for y in range(3)]
                     Active_Matrix[index[2]][index[3]] = True
+                    '''if check_full([row[index[3]*3:index[3]*3+3] for row in Game_Matrix[index[2]*3:index[2]*3+3]]) is True:
+                        print 'Full poi'
+                        Active_Matrix = [[True for x in range(3)] for y in range(3)]'''
                     if status['O'] == True and player == False:
                         print 'in O'
                         Posession_MatrixO[index[0]][index[1]] = True

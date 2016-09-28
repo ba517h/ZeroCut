@@ -93,15 +93,11 @@ def is_active(value):
         return False
     if (Active_Matrix[index[0]][index[1]] == False):
         return False
-    '''if (164<=value[0]<=173) or (338<=value[0]<=347) or (52<=value[0]<=55) or (108<=value[0]<=111) or (226<=value[0]<=229) or (282<=value[0]<=285) or (400<=value[0]<=403) or (456<=value[0]<=459):
-        return False
-    if (164<=value[1]<=173) or (338<=value[1]<=347) or (52<=value[1]<=55) or (108<=value[1]<=111) or (226<=value[1]<=229) or (282<=value[1]<=285) or (400<=value[1]<=403) or (456<=value[1]<=459):
-        return False'''
     return True
 
 #Function to check whether a 3x3 matrix has got 3 in a row
 def check(matrix):
-    print matrix
+    #print matrix
     ret = {'O':False,'X':False}
     i=j=f1=f2=0
     for i in range(3):
@@ -142,25 +138,75 @@ def check(matrix):
 
 #Function to display the winner
 def won(player):
-    if player == True:
-        SCREEN.blit(IMAGES['X'],(0,0))
-    else:
-        SCREEN.blit(IMAGES['O'],(0,0))
-    pygame.display.update()
+    SOUNDS['win'].play()
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.exit()
+                sys.exit()
+            if event.type == KEYDOWN or event.type == MOUSEBUTTONUP:
+                return
+                # drawing the screen
+        SCREEN.blit(IMAGES['gamebg'], (0, 0))
+        coord = [None, None]
+        for i in range(9):
+            for j in range(9):
+                if Game_Matrix[i][j] is not None:
+                    if i == 0:
+                        coord[0] = 0
+                    elif i == 1:
+                        coord[0] = 56
+                    elif i == 2:
+                        coord[0] = 112
+                    elif i == 3:
+                        coord[0] = 174
+                    elif i == 4:
+                        coord[0] = 230
+                    elif i == 5:
+                        coord[0] = 286
+                    elif i == 6:
+                        coord[0] = 348
+                    elif i == 7:
+                        coord[0] = 404
+                    else:
+                        coord[0] = 460
 
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.exit()
-            sys.exit()
-        if event.type == KEYDOWN or event.type == MOUSEBUTTONUP:
-            return
+                    if j == 0:
+                        coord[1] = 0
+                    elif j == 1:
+                        coord[1] = 56
+                    elif j == 2:
+                        coord[1] = 112
+                    elif j == 3:
+                        coord[1] = 174
+                    elif j == 4:
+                        coord[1] = 230
+                    elif j == 5:
+                        coord[1] = 286
+                    elif j == 6:
+                        coord[1] = 348
+                    elif j == 7:
+                        coord[1] = 404
+                    else:
+                        coord[1] = 460
+                    if Game_Matrix[i][j] == True:
+                        SCREEN.blit(IMAGES['X'], (coord[1], coord[0]))
+                    else:
+                        SCREEN.blit(IMAGES['O'], (coord[1], coord[0]))
+        if player == True:
+            SCREEN.blit(IMAGES['X_win'], (0, 162))
+        else:
+            SCREEN.blit(IMAGES['O_win'], (0, 162))
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
 
-'''def check_full(matrix):
+
+def check_full(matrix):
     for i in range(3):
         for j in range(3):
             if matrix[i][j] is None:
                 return False
-    return True'''
+    return True
 
 def playgame():
     global Active_Matrix
@@ -178,41 +224,41 @@ def playgame():
                 pos = pygame.mouse.get_pos()
                 index1 = get_index(pos)
                 if is_active(pos) == False or (is_active(pos) == True and Game_Matrix[index1[0]*3+index1[2]][index1[1]*3+index1[3]] is not None):
-                    SOUNDS['win'].play()
+                    SOUNDS['error'].play()
                 else :
                     #valid movement
                     index = index1
                     Game_Matrix[index[0] * 3 + index[2]][index[1] * 3 + index[3]] = player
-                    print 'check 1'
-                    print 'index'
-                    print index
+                    #print 'check 1'
+                    #print 'index'
+                    #print index
                     status = check([row[index[1]*3:index[1]*3+3] for row in Game_Matrix[index[0]*3:index[0]*3+3]]) #'O','X'
-                    print status
+                    #print status
                     Active_Matrix = [[False for x in range(3)] for y in range(3)]
                     Active_Matrix[index[2]][index[3]] = True
-                    '''if check_full([row[index[3]*3:index[3]*3+3] for row in Game_Matrix[index[2]*3:index[2]*3+3]]) is True:
-                        print 'Full poi'
-                        Active_Matrix = [[True for x in range(3)] for y in range(3)]'''
+                    if check_full([row[index[3]*3:index[3]*3+3] for row in Game_Matrix[index[2]*3:index[2]*3+3]]) is True:
+                        #print 'Full poi'
+                        Active_Matrix = [[True for x in range(3)] for y in range(3)]
                     if status['O'] == True and player == False:
-                        print 'in O'
+                        #print 'in O'
                         Posession_MatrixO[index[0]][index[1]] = True
-                        print Posession_MatrixO
-                        print 'check 2'
+                        #print Posession_MatrixO
+                        #print 'check 2'
                         win_status = check(Posession_MatrixO)
                         if win_status['X'] == True:    #win_status['X'] is used since both posession matrices use true to represent possesed ...
-                            print 'Ojayichu'
+                            #print 'Ojayichu'
                             won(False)
                             return
                         player = not player
                         continue
                     if status['X'] == True and player == True:
-                        print 'in X'
+                        #print 'in X'
                         Posession_MatrixX[index[0]][index[1]] = True
-                        print Posession_MatrixX
-                        print 'check 2'
+                        #print Posession_MatrixX
+                        #print 'check 2'
                         win_status = check(Posession_MatrixX)
                         if win_status['X'] == True:
-                            print 'Xjayichu'
+                            #print 'Xjayichu'
                             won(True)
                             return
                         player = not player
@@ -271,9 +317,15 @@ def playgame():
         #setting the shadow for inactive matrices
         if all(Active_Matrix[0]) == all(Active_Matrix[1]) == all(Active_Matrix[2]) == False:
             if(index[2] == 1 and index[3] == 1):
-                SCREEN.blit(IMAGES['c_shad'],(0,0))
+                if player is True:
+                    SCREEN.blit(IMAGES['wc_shad'],(0,0))
+                else:
+                    SCREEN.blit(IMAGES['bc_shad'], (0, 0))
             elif index[2] == 1 or index[3] == 1:
-                shad = 'm_shad'
+                if player is True:
+                    shad = 'wm_shad'
+                else:
+                    shad = 'bm_shad'
                 if index[2] == 1 and index[3] == 2:
                     SCREEN.blit(pygame.transform.rotate(IMAGES[shad],270),(0,0))
                 elif index[2] == 2 and index[3] == 1:
@@ -283,7 +335,10 @@ def playgame():
                 else:
                     SCREEN.blit(IMAGES[shad], (0, 0))
             else:
-                shad = 's_shad'
+                if player is True:
+                    shad = 'ws_shad'
+                else:
+                    shad = 'bs_shad'
                 if index[2] == 0 and index[3] == 2:
                     SCREEN.blit(pygame.transform.rotate(IMAGES[shad], 270), (0, 0))
                 elif index[2] == 2 and index[3] == 2:
@@ -306,11 +361,16 @@ def main():
 
     IMAGES['gamebg'] = pygame.image.load('assets/images/game.png').convert()
     IMAGES['welcome'] = pygame.image.load('assets/images/bg.png').convert()
-    IMAGES['c_shad'] = pygame.image.load('assets/images/shadowc.png').convert_alpha()
-    IMAGES['m_shad'] = pygame.image.load('assets/images/shadowm.png').convert_alpha()
-    IMAGES['s_shad'] = pygame.image.load('assets/images/shadows.png').convert_alpha()
+    IMAGES['bc_shad'] = pygame.image.load('assets/images/bshadowc.png').convert_alpha()
+    IMAGES['bm_shad'] = pygame.image.load('assets/images/bshadowm.png').convert_alpha()
+    IMAGES['bs_shad'] = pygame.image.load('assets/images/bshadows.png').convert_alpha()
+    IMAGES['wc_shad'] = pygame.image.load('assets/images/wshadowc.png').convert_alpha()
+    IMAGES['wm_shad'] = pygame.image.load('assets/images/wshadowm.png').convert_alpha()
+    IMAGES['ws_shad'] = pygame.image.load('assets/images/wshadows.png').convert_alpha()
     IMAGES['O'] = pygame.image.load('assets/images/O.png').convert_alpha()
     IMAGES['X'] = pygame.image.load('assets/images/X.png').convert_alpha()
+    IMAGES['X_win'] = pygame.image.load('assets/images/winx.png').convert_alpha()
+    IMAGES['O_win'] = pygame.image.load('assets/images/wino.png').convert_alpha()
 
     #sounds
     if 'win' in sys.platform:
@@ -318,7 +378,8 @@ def main():
     else:
         soundExt = '.ogg'
 
-    SOUNDS['win'] = pygame.mixer.Sound('assets/audio/wing'+soundExt)
+    SOUNDS['error'] = pygame.mixer.Sound('assets/audio/err'+soundExt)
+    SOUNDS['win'] = pygame.mixer.Sound('assets/audio/win'+soundExt)
 
     #Overall game loop
     while True:
@@ -333,7 +394,7 @@ def main():
                 Posession_MatrixX = [[None for x in range(3)] for y in range(3)]
                 Active_Matrix = [[True for x in range(3)] for y in range(3)]
                 pos = pygame.mouse.get_pos()
-                if  100 < pos[0] <250 and 100 < pos [1] < 250 :
+                if  147 < pos[0] <366 and 368 < pos [1] < 420 :
                     playgame()
 
         SCREEN.blit(IMAGES['welcome'], (0, 0))
